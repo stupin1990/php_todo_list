@@ -27,7 +27,7 @@
     </form>
     </div>
     
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-0">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-0 mb-4">
     <?php if ($tasks['total']) { ?>
         <?php foreach ($tasks['data'] as $task) { ?>
             <div class="col-4 card me-2 mt-2 card-20">
@@ -43,14 +43,13 @@
             </div>
         <?php } ?>
     <?php } else { ?>
-        <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-secondary mt-2" role="alert">
             There are no tasks!
         </div>
     <?php } ?>
     </div>
 
     <?php if ($tasks['pages'] > 1) { ?>
-        <div class="mt-4">
         <?php $this->renderPartial('Components/pagination', [
             'pages' => $tasks['pages'],
             'current_page' => $tasks['current_page'],
@@ -60,7 +59,6 @@
             'total' => $tasks['total'],
             'url' => $url
         ]) ?>
-        </div>
     <?php } ?>
 
     <h4>Add new task</a></h4>

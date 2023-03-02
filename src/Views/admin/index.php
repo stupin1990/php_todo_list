@@ -17,7 +17,7 @@
     <?php } ?>
     <?php } ?>
     
-    <div class="d-flex mt-2">
+    <div class="d-flex mt-2 mb-4">
     <?php if ($tasks['total']) { ?>
         <form action="<?= $url ?>" method="POST">
         <table class="table table-striped">
@@ -60,7 +60,6 @@
     </div>
 
     <?php if ($tasks['pages'] > 1) { ?>
-        <div class="mt-4">
         <?php $this->renderPartial('/Components/pagination', [
             'pages' => $tasks['pages'],
             'current_page' => $tasks['current_page'],
@@ -70,7 +69,6 @@
             'total' => $tasks['total'],
             'url' => $url
         ]) ?>
-        </div>
     <?php } ?>
 
     <h4>Add new task</a></h4>
