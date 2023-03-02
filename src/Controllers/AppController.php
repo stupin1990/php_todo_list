@@ -28,7 +28,7 @@ class AppController extends Controller
         }
         $order_by = strtoupper(str_replace('_', ' ', $sort));
 
-        $tasks = Task::selectPaginate(['name', 'email', 'post', 'done'], $this->page, $order_by, $this->per_page);
+        $tasks = Task::selectPaginate(['name', 'email', 'post', 'done', 'updated_by'], $this->page, $order_by, $this->per_page);
 
         $this->render('index', [
             'tasks' => $tasks,
