@@ -36,6 +36,9 @@
                     <h5 class="card-title"><?= $task['email'] ?></h5>
                     <p class="card-text"><?= $task['post'] ?></p>
                     <span class="badge text-bg-<?= $task['done'] ? 'success' : 'danger' ?>"><?= $task['done'] ? 'Done' : 'Undone' ?></span>
+                    <?php if ($task['updated_by'] == 'admin') { ?>
+                        <span class="badge text-bg-info">Updated by admin</span>
+                    <?php } ?>
                 </div>
             </div>
         <?php } ?>
