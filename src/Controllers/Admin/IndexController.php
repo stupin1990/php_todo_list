@@ -14,9 +14,9 @@ class IndexController extends AdminController
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_POST['new_task'])) {
-                $data = $this->prepareSaveData($fields, $_POST['new_task']);
-                if (!count($data['errors'])) {
-                    $errors = Task::add($fields, $data['params']);
+                list($errors, $params) = $this->prepareSaveData($fields, $_POST['new_task']);
+                if (!count($errors)) {
+                    $errors = Task::add($fields, $params);
                 }
                 if (!count($errors)) {
                     header("Location: /admin/index?success=1");
@@ -30,18 +30,15 @@ class IndexController extends AdminController
                         $delete_ar[] = $id;
                         continue;
                     }
-                    $update = $this->prepareSaveData($fields, $data);
-                    if (!count($update['errors'])) {
-                        $update['params'] = 
-                        $_errors = Task::update($id, $fields, $update['params']);
+                    list($errors, $params) = $this->prepareSaveData($fields, $data);
+                    if (!count($errors)) {
+                        $_errors = Task::update($id, $fields, $params);
                         $errors = array_merge($errors, $_errors);
                     }
                 }
-
                 if (count($delete_ar) && !Task::delete($delete_ar)) {
                     $errors[] = 'Failed to delete data!';
                 }
-
                 if (!count($errors)) {
                     header("Location: /admin/index?success=1");
                     die;

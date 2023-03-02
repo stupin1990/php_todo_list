@@ -12,9 +12,9 @@ class AppController extends Controller
         $errors = [];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $fields = ['name', 'email', 'post'];
-            $data = $this->prepareSaveData($fields, $_POST);
-            if (!count($data['errors'])) {
-                $errors = Task::add($fields, $data['params']);
+            list($errors, $params) = $this->prepareSaveData($fields, $_POST);
+            if (!count($errors)) {
+                $errors = Task::add($fields, $params);
             }
             if (!count($errors)) {
                 header("Location: /?success=1");
