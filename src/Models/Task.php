@@ -11,16 +11,16 @@ class Task extends Model
     protected static string $table_name = 'tasks';
 
     public static array $sort_ar = [
-        'id_desc' => 'Sort tasks', 
-        'name_asc' => 'Name &and;', 
-        'name_desc' => 'Name &or;', 
-        'email_asc' => 'Email &and;', 
-        'email_desc' => 'Email &or;', 
-        'done_asc' => 'Done &and;', 
+        'id_desc' => 'Sort tasks',
+        'name_asc' => 'Name &and;',
+        'name_desc' => 'Name &or;',
+        'email_asc' => 'Email &and;',
+        'email_desc' => 'Email &or;',
+        'done_asc' => 'Done &and;',
         'done_desc' => 'Done &or;'
     ];
 
-    public static function add(array $fields, array $params) : array
+    public static function add(array $fields, array $params): array
     {
         $errors = [];
 
@@ -31,7 +31,7 @@ class Task extends Model
         return $errors;
     }
 
-    public static function update(int $id, array $fields, array $params) : array
+    public static function update(int $id, array $fields, array $params): array
     {
         $errors = [];
 
@@ -41,5 +41,4 @@ class Task extends Model
 
         return $errors;
     }
-
 }

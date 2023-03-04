@@ -1,30 +1,17 @@
 <div class="mx-2">
     <h4>Tasks</h4>
 
-    <?php if ($success) { ?>
-    <div class="alert alert-success alert-dismissible" role="alert">
-        <div>Task was added!</div>   
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php } ?>
-
-    <?php if ($errors) { ?>
-    <?php foreach ($errors as $error) { ?>
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <div><?= $error ?></div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php } ?>
-    <?php } ?>
+    <?php $this->renderPartial('/Components/alerts', [
+        'success' => $success,
+        'errors' => $errors,
+    ]) ?>
 
     <div class="card-20">
-    <form action="/" method="GET">
-    <select class="form-select" name="sort" onchange="submit()">
-        <?php foreach ($sort_ar as $sort_val => $sort_name) { ?>
-        <option value="<?= $sort_val ?>" <?= $sort_val == $sort ? 'selected' : '' ?>><?= $sort_name ?></option>
-        <?php } ?>
-    </select>
-    </form>
+        <?php $this->renderPartial('/Components/sort_block', [
+            'url' => $url,
+            'sort_ar' => $sort_ar,
+            'sort' => $sort
+        ]) ?>
     </div>
     
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-0 mb-4">
@@ -63,23 +50,9 @@
 
     <h4>Add new task</a></h4>
 
-    <form action="/" method="POST" class="mb-4">
-        <div class="mb-3">
-            <label for="name" class="form-label">User name</label>
-            <input type="text" name="name" class="form-control" id="name" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">User Email</label>
-            <input type="email" name="email" class="form-control" id="email" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="post" class="form-label">Post</label>
-            <textarea class="form-control" name="post" required></textarea>
-        </div>
-    
-        <button type="submit" class="btn btn-primary">Add</button>
-    </form>
+    <?php $this->renderPartial('/Components/add_form', [
+        'url' => $url,
+        'show_done' => 0
+    ]) ?>
 
 </div>

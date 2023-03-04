@@ -2,6 +2,8 @@
 
 namespace Src\Core;
 
+use Src\Services\Validation\ValidationInterface;
+
 class Controller
 {
     protected int $page = 1;
@@ -18,36 +20,22 @@ class Controller
 
         $this->per_page = Config::PER_PAGE;
 
-        $this->view = new View;
+        $this->view = new View();
     }
 
-    public function isPostData(array $fields) : bool
-    {
-        $is_post_items = array_filter($fields, function ($item) { return isset($_POST[$item]); });
-        return count($is_post_items) ? true : false;
-    }
-
-    public function prepareSaveData(array $fields, array $data) : array
+    public function prepareSaveData(array $fields, array $data, ValidationInterface $validator): array
     {
         $errors = $params = [];
-        foreach($fields as $field) {
-            if (!isset($data[$field]) && $field == 'done') {
-                $params[':' . $field] = 0;
-                continue;
-            }
-            elseif (!isset($data[$field]) && $field == 'updated_by') {
+        foreach ($fields as $field) {
+            if ($field == 'updated_by') {
                 $params[':' . $field] = $this->authorized ? 'admin' : 'guest';
-                continue;
+            } else {
+                $validated = $validator->validate($field, $data[$field] ?? '');
+                $params[':' . $field] = $validated['value'];
+                if ($validated['error']) {
+                    $errors[] = $validated['error'];
+                }
             }
-            elseif (!isset($data[$field])) {
-                $errors[] = "Please enter field: $field!";
-                continue;
-            }
-            elseif ($field == 'email' && !filter_var($data[$field], FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "Email address is invalid.";
-                continue;
-            }
-            $params[':' . $field] = htmlentities($data[$field]);
         }
 
         return [$errors, $params];

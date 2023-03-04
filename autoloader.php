@@ -1,5 +1,12 @@
 <?php
 
 spl_autoload_register(function ($class) {
-    include __DIR__ . '/' . $class . '.php';
+    $path = __DIR__ . '/' . $class . '.php';
+
+    if (!file_exists($path)) {
+        echo '404 Not Found';
+        die;
+    }
+
+    include $path;
 });

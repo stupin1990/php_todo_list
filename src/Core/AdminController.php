@@ -60,8 +60,7 @@ class AdminController extends Controller
         if (isset($_POST['user']) && isset($_POST['password'])) {
             if (!$this->auth($_POST['user'], $_POST['password'])) {
                 $errors[] = 'Invalid user name or password!';
-            }
-            else {
+            } else {
                 header("Location: /admin/index");
                 die;
             }
@@ -77,5 +76,4 @@ class AdminController extends Controller
         unset($_SESSION['user']);
         header("Location: /admin/index/login");
     }
-
 }

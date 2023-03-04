@@ -1,21 +1,18 @@
 <div class="mx-2">
     <h4>Edit tasks</h4>
 
-    <?php if ($success) { ?>
-    <div class="alert alert-success alert-dismissible" role="alert">
-        <div>Tasks was saved!</div>   
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php } ?>
+    <?php $this->renderPartial('/Components/alerts', [
+        'success' => $success,
+        'errors' => $errors,
+    ]) ?>
 
-    <?php if ($errors) { ?>
-    <?php foreach ($errors as $error) { ?>
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <div><?= $error ?></div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="card-20">
+        <?php $this->renderPartial('/Components/sort_block', [
+            'url' => $url,
+            'sort_ar' => $sort_ar,
+            'sort' => $sort
+        ]) ?>
     </div>
-    <?php } ?>
-    <?php } ?>
     
     <div class="d-flex mt-2 mb-4">
     <?php if ($tasks['total']) { ?>
@@ -73,27 +70,9 @@
 
     <h4>Add new task</a></h4>
         
-    <form action="<?= $url ?>" method="POST" class="mb-4">
-        <div class="mb-3">
-            <label for="name" class="form-label">User name</label>
-            <input type="text" name="new_task[name]" class="form-control" id="name" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">User Email</label>
-            <input type="email" name="new_task[email]" class="form-control" id="email" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="post" class="form-label">Post</label>
-            <textarea class="form-control" name="new_task[post]" required></textarea>
-            <div class="form-check">
-                <input type="checkbox" name="new_task[done]" value="1" id="done">
-                <label class="form-check-label" for="done">Done</label>
-            </div>
-        </div>
-    
-        <button type="submit" class="btn btn-primary">Add</button>
-    </form>
+    <?php $this->renderPartial('/Components/add_form', [
+        'url' => $url,
+        'show_done' => 1
+    ]) ?>
 
 </div>
