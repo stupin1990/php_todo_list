@@ -2,7 +2,8 @@
 
 namespace Src\Core;
 
-class Config {
+class Config
+{
     public const DB_HOST = 'localhost';
     public const DB_NAME = 'todo';
     public const DB_USER = '';

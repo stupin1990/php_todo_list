@@ -4,17 +4,18 @@ namespace Src\Controllers\Admin;
 
 use Src\Core\AdminController;
 use Src\Models\Task;
+use Src\Services\Validation\TaskValidation;
 
 class IndexController extends AdminController
 {
     public function index()
     {
         $errors = [];
-        $fields = ['name', 'email', 'post', 'done', 'updated_by'];
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (isset($_POST['new_task'])) {
-                list($errors, $params) = $this->prepareSaveData($fields, $_POST['new_task']);
+            $fields = ['name', 'email', 'post', 'done', 'updated_by'];
+            // Save new post
+            if (isset($_POST['name'])) {
+                list($errors, $params) = $this->prepareSaveData($fields, $_POST, TaskValidation::getInstance());
                 if (!count($errors)) {
                     $errors = Task::add($fields, $params);
                 }
@@ -23,14 +24,15 @@ class IndexController extends AdminController
                     die;
                 }
             }
-            else {
+            // Update exists posts
+            elseif ($_POST['task']) {
                 $delete_ar = [];
                 foreach ($_POST['task'] as $id => $data) {
                     if (isset($data['delete'])) {
                         $delete_ar[] = $id;
                         continue;
                     }
-                    list($errors, $params) = $this->prepareSaveData($fields, $data);
+                    list($errors, $params) = $this->prepareSaveData($fields, $data, TaskValidation::getInstance());
                     if (!count($errors)) {
                         $_errors = Task::update($id, $fields, $params);
                         $errors = array_merge($errors, $_errors);
@@ -46,12 +48,16 @@ class IndexController extends AdminController
             }
         }
 
-        $tasks = Task::selectPaginate(['id', 'name', 'email', 'post', 'done'], $this->page, '', $this->per_page);
+        $sort_by = $_GET['sort'] ?? '';
+
+        $tasks = Task::selectPaginate(['id', 'name', 'email', 'post', 'done'], $this->page, $sort_by, $this->per_page);
 
         $this->render('admin/index', [
             'tasks' => $tasks,
             'success' => $_GET['success'] ?? 0,
-            'errors' => $errors
+            'errors' => $errors,
+            'sort_ar' => Task::$sort_ar,
+            'sort' => $sort_by,
         ]);
     }
 }

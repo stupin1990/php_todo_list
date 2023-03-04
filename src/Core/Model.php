@@ -5,20 +5,13 @@ namespace Src\Core;
 use Src\Core\DB;
 use Src\Core\Config;
 
-class Model 
+class Model
 {
     protected static string $table_name;
 
-    public static function getFields() : array
+    public static function selectPaginate(array $select = [], int $page = 1, string $order = '', int $per_page = 3): array
     {
-        return $this->fields;
-    }
-
-    public static function selectPaginate(array $select = [], int $page = 1, string $order = '', int $per_page = 3) : array
-    {
-        if (!$order) {
-            $order = 'id DESC';
-        }
+        $order = static::getOrder($order);
 
         $total = DB::getRow("SELECT COUNT(*) AS total FROM `" . static::$table_name . "`");
         $total = $total['total'];
@@ -48,6 +41,16 @@ class Model
         ];
     }
 
+    public static function getOrder(string $order): string
+    {
+        if (!isset(static::$sort_ar[$order])) {
+            $order = 'id_desc';
+        }
+        $order = strtoupper(str_replace('_', ' ', $order));
+
+        return $order;
+    }
+
     public static function save(array $fields, array $values, int $id = 0)
     {
         if ($id) {
@@ -74,7 +77,7 @@ class Model
 
             return true;
         }
-        
+
         $query = "INSERT INTO `" . static::$table_name . "` (`" . implode('`,`', $fields) ."`) VALUES (" . implode(",", array_keys($values)) . ")";
         return DB::insertRow($query, $values);
     }

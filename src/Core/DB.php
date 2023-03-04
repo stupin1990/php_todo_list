@@ -2,8 +2,8 @@
 
 namespace Src\Core;
 
-final class DB {
-
+final class DB
+{
     private \PDO $dbo;
 
     private static $instance;
@@ -41,36 +41,33 @@ final class DB {
             $res = self::getInstance()->prepare($query);
             $res->execute($params);
             return $res->fetch();
-        }
-        catch(\PDOException $e) {
+        } catch(\PDOException $e) {
             return false;
         }
     }
-    
+
     public static function getRows(string $query, array $params = [])
     {
         try {
             $res = self::getInstance()->prepare($query);
             $res->execute($params);
             return $res->fetchAll();
-        }
-        catch(\PDOException $e) {
+        } catch(\PDOException $e) {
             return false;
         }
     }
-    
+
     public static function insertRow(string $query, array $params)
     {
         try {
             $res = self::getInstance()->prepare($query);
             $res->execute($params);
             return true;
-        }
-        catch(PDOException $e) {
+        } catch(PDOException $e) {
             return false;
         }
     }
-    
+
     public static function updateRow(string $query, array $params)
     {
         return self::insertRow($query, $params);

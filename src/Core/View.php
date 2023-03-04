@@ -4,6 +4,8 @@ namespace Src\Core;
 
 class View
 {
+    private array $request = [];
+
     public function render(string $template_name, $data = [], string $layout = 'main')
     {
         if (!isset($data['title'])) {
@@ -30,5 +32,19 @@ class View
         }
 
         include_once __DIR__ . '/../Views/' . $template_name . '.php';
+    }
+
+    public function __get($name)
+    {
+        if (isset($this->request[$name])) {
+            return $this->request[$name];
+        }
+
+        $this->request[$name] = '';
+        if (isset($_REQUEST[$name])) {
+            $this->request[$name] = htmlentities($_REQUEST[$name]);
+        }
+
+        return $this->request[$name];
     }
 }
