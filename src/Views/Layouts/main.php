@@ -34,6 +34,6 @@
     <div id="content" class="container mt-2">
         <?php $this->renderPartial($template_name, $data) ?>
     </div>
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

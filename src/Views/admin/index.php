@@ -50,7 +50,7 @@
         <button type="submit" class="btn btn-primary">Update</button>
         </form>
     <?php } else { ?>
-        <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-secondary card-20" role="alert">
             There are no tasks!
         </div>
     <?php } ?>
