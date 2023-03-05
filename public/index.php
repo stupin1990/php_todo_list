@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/autoloader.php';
+require_once __DIR__ . '/../autoloader.php';
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = $path == '/' ? 'App' : trim($path, '/');
