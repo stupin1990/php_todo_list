@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <h5 class="card-title"><?= $task['name'] ?></h5>
                     <h5 class="card-title"><?= $task['email'] ?></h5>
-                    <p class="card-text"><?= $task['post'] ?></p>
+                    <p class="card-text"><?= nl2br($task['post']) ?></p>
                     <span class="badge text-bg-<?= $task['done'] ? 'success' : 'danger' ?>"><?= $task['done'] ? 'Done' : 'Undone' ?></span>
                     <?php if ($task['updated_by'] == 'admin') { ?>
                         <span class="badge text-bg-info">Updated by admin</span>
@@ -50,9 +50,11 @@
 
     <h4>Add new task</a></h4>
 
+    <div class="card-20">
     <?php $this->renderPartial('/Components/add_form', [
         'url' => $url,
         'show_done' => 0
     ]) ?>
+    </div>
 
 </div>

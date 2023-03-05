@@ -69,10 +69,12 @@
     <?php } ?>
 
     <h4>Add new task</a></h4>
-        
+    
+    <div class="card-20">
     <?php $this->renderPartial('/Components/add_form', [
         'url' => $url,
         'show_done' => 1
     ]) ?>
+    </div>
 
 </div>

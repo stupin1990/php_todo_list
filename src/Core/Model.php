@@ -51,11 +51,14 @@ class Model
         return $order;
     }
 
-    public static function save(array $fields, array $values, int $id = 0)
+    public static function save(array $fields, array $values, int $id = 0) : bool
     {
         if ($id) {
             $query = "SELECT `" . implode('`,`', $fields) ."` FROM `" . static::$table_name . "` WHERE id = $id";
             $current = DB::getRow($query);
+            if (!$current) {
+                return true;
+            }
 
             $update_ar = $values_ar = [];
             $updated = false;
@@ -82,7 +85,7 @@ class Model
         return DB::insertRow($query, $values);
     }
 
-    public static function delete(array $ids)
+    public static function delete(array $ids) : bool
     {
         $query = "DELETE FROM `" . static::$table_name . "` WHERE id IN (" . implode(',', $ids) . ")";
         return DB::deleteRow($query);
