@@ -7,8 +7,8 @@
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/assets/css/main.css" rel="stylesheet">
+        <link href="/public/assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/public/assets/css/main.css" rel="stylesheet">
     </head>
   <body>
     <header>
@@ -34,6 +34,6 @@
     <div id="content" class="container mt-2">
         <?php $this->renderPartial($template_name, $data) ?>
     </div>
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

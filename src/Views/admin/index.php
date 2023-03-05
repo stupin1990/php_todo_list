@@ -50,7 +50,7 @@
         <button type="submit" class="btn btn-primary">Update</button>
         </form>
     <?php } else { ?>
-        <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-secondary card-20" role="alert">
             There are no tasks!
         </div>
     <?php } ?>
@@ -69,10 +69,12 @@
     <?php } ?>
 
     <h4>Add new task</a></h4>
-        
+    
+    <div class="card-20">
     <?php $this->renderPartial('/Components/add_form', [
         'url' => $url,
         'show_done' => 1
     ]) ?>
+    </div>
 
 </div>

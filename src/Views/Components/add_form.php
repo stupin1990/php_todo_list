@@ -11,7 +11,7 @@
 
     <div class="mb-3">
         <label for="post" class="form-label">Post</label>
-        <textarea class="form-control" name="post" required><?= $this->post ?></textarea>
+        <textarea rows="5" class="form-control" name="post" required><?= $this->post ?></textarea>
         <?php if ($show_done) { ?>
         <div class="form-check">
             <input type="checkbox" name="done" value="1" id="done" <?= $this->done ? 'checked' : '' ?>>
