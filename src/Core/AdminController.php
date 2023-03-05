@@ -25,13 +25,9 @@ class AdminController extends Controller
         session_start([
             'cookie_lifetime' => 0,
         ]);
-        if (isset($_SESSION['user'])) {
-            foreach (Config::USERS as $user => $pass) {
-                if ($_SESSION['user'] == sha1($user . $pass)) {
-                    $this->authorized = true;
-                    return true;
-                }
-            }
+        if (isset($_SESSION['user']) && isset(Config::USERS[$_SESSION['user']])) {
+            $this->authorized = true;
+            return true;
         }
 
         return false;
@@ -39,11 +35,9 @@ class AdminController extends Controller
 
     protected function auth($user, $password)
     {
-        foreach (Config::USERS as $u => $p) {
-            if ($user == $u && $password == $p) {
-                $_SESSION['user'] = sha1($user . $password);
-                return true;
-            }
+        if (isset(Config::USERS[$user]) && Config::USERS[$user] == $password) {
+            $_SESSION['user'] = $user;
+            return true;
         }
 
         return false;
