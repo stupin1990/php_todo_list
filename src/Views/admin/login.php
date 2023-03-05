@@ -13,12 +13,12 @@
     <form action="<?= $url ?>" method="POST">
         <div class="mb-3">
             <label for="user" class="form-label">User</label>
-            <input type="text" name="user" class="form-control" id="user" required>
+            <input type="text" name="user" class="form-control card-20" id="user" required>
         </div>
 
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" id="password" required>
+            <input type="password" name="password" class="form-control card-20" id="password" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Login</button>
