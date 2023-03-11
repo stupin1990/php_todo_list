@@ -18,14 +18,18 @@
     <?php if ($tasks['total']) { ?>
         <?php foreach ($tasks['data'] as $task) { ?>
             <div class="col-4 card me-2 mt-2 card-20">
-                <div class="card-body">
+                <div class="card-body position-relative">
                     <h5 class="card-title"><?= $task['name'] ?></h5>
                     <h5 class="card-title"><?= $task['email'] ?></h5>
-                    <p class="card-text"><?= nl2br($task['post']) ?></p>
-                    <span class="badge text-bg-<?= $task['done'] ? 'success' : 'danger' ?>"><?= $task['done'] ? 'Done' : 'Undone' ?></span>
-                    <?php if ($task['updated_by'] == 'admin') { ?>
-                        <span class="badge text-bg-info">Updated by admin</span>
-                    <?php } ?>
+                    <p class="card-text">
+                        <?= nl2br($task['post']) ?> <br /><br />
+                    </p>
+                    <div class="card-statuses position-absolute bottom-0 start-0">
+                        <span class="badge text-bg-<?= $task['done'] ? 'success' : 'danger' ?>"><?= $task['done'] ? 'Done' : 'Undone' ?></span>
+                        <?php if ($task['updated_by'] == 'admin') { ?>
+                            <span class="badge text-bg-info">Updated by admin</span>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         <?php } ?>

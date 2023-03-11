@@ -27,14 +27,10 @@ class Controller
     {
         $errors = $params = [];
         foreach ($fields as $field) {
-            if ($field == 'updated_by') {
-                $params[':' . $field] = $this->authorized ? 'admin' : 'guest';
-            } else {
-                $validated = $validator->validate($field, $data[$field] ?? '');
-                $params[':' . $field] = $validated['value'];
-                if ($validated['error']) {
-                    $errors[] = $validated['error'];
-                }
+            $validated = $validator->validate($field, $data[$field] ?? '');
+            $params[':' . $field] = $validated['value'];
+            if ($validated['error']) {
+                $errors[] = $validated['error'];
             }
         }
 

@@ -16,7 +16,7 @@
     
     <div class="d-flex mt-2 mb-4">
     <?php if ($tasks['total']) { ?>
-        <form action="<?= $url ?>" method="POST">
+        <form action="<?= $url ?>page=<?= $page ?>" method="POST">
         <table class="table table-striped">
             <thead>
                 <tr>

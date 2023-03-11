@@ -14,8 +14,8 @@ class AppController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $fields = ['name', 'email', 'post'];
             list($errors, $params) = $this->prepareSaveData($fields, $_POST, TaskValidation::getInstance());
-            if (!count($errors)) {
-                $errors = Task::add($fields, $params);
+            if (!count($errors) && !Task::save($fields, $params)) {
+                $errors = "Failed to save data!";
             }
             if (!count($errors)) {
                 header("Location: /?success=1");
@@ -32,8 +32,7 @@ class AppController extends Controller
             'success' => $_GET['success'] ?? 0,
             'errors' => $errors,
             'sort_ar' => Task::$sort_ar,
-            'sort' => $sort_by,
-            'data'
+            'sort' => $sort_by
         ]);
     }
 }

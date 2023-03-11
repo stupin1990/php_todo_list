@@ -20,25 +20,11 @@ class Task extends Model
         'done_desc' => 'Done &or;'
     ];
 
-    public static function add(array $fields, array $params): array
-    {
-        $errors = [];
+    protected static array $default_values = [
+        'updated_at' => "NOW()"
+    ];
 
-        if (!static::save($fields, $params)) {
-            $errors[] = 'Failed to save data!';
-        }
-
-        return $errors;
-    }
-
-    public static function update(int $id, array $fields, array $params): array
-    {
-        $errors = [];
-
-        if (!static::save($fields, $params, $id)) {
-            $errors[] = 'Failed to update data!';
-        }
-
-        return $errors;
-    }
+    protected static array $not_to_update_fields = [
+        'updated_by'
+    ];
 }

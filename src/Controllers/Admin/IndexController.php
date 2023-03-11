@@ -12,15 +12,12 @@ class IndexController extends AdminController
     {
         $errors = [];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $fields = ['name', 'email', 'post', 'done', 'updated_by'];
+            $fields = ['name', 'email', 'post', 'done'];
             // Save new post
             if (isset($_POST['name'])) {
-                list($errors, $params) = $this->prepareSaveData($fields, $_POST, TaskValidation::getInstance());
+                $errors = $this->handleTasks($fields, $_POST);
                 if (!count($errors)) {
-                    $errors = Task::add($fields, $params);
-                }
-                if (!count($errors)) {
-                    header("Location: /admin/index?success=1");
+                    header('Location: ' . $_SERVER['REQUEST_URI']. '&success=1');
                     die;
                 }
             }
@@ -32,17 +29,16 @@ class IndexController extends AdminController
                         $delete_ar[] = $id;
                         continue;
                     }
-                    list($errors, $params) = $this->prepareSaveData($fields, $data, TaskValidation::getInstance());
-                    if (!count($errors)) {
-                        $_errors = Task::update($id, $fields, $params);
-                        $errors = array_merge($errors, $_errors);
+                    $errors = $this->handleTasks($fields, $data, $id);
+                    if (count($errors)) {
+                        break;
                     }
                 }
-                if (count($delete_ar) && !Task::delete($delete_ar)) {
+                if (!Task::delete($delete_ar)) {
                     $errors[] = 'Failed to delete data!';
                 }
                 if (!count($errors)) {
-                    header("Location: /admin/index?success=1");
+                    header('Location: ' . $_SERVER['REQUEST_URI']. '&success=1');
                     die;
                 }
             }
@@ -58,6 +54,26 @@ class IndexController extends AdminController
             'errors' => $errors,
             'sort_ar' => Task::$sort_ar,
             'sort' => $sort_by,
+            'page' => $this->page
         ]);
+    }
+
+    public function handleTasks($fields, $data, $id = 0) : array
+    {
+        list($errors, $params) = $this->prepareSaveData($fields, $data, TaskValidation::getInstance());
+        if (!count($errors)) {
+            $fields[] = 'updated_by';
+            $params[':updated_by'] = 'admin';
+
+            $saved = $id ?
+                Task::update($id, $fields, $params) :
+                Task::save($fields, $params);
+
+            if (!$saved) {
+                $errors[] = "Failed to save data!";
+            }
+        }
+
+        return $errors;
     }
 }

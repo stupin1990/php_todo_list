@@ -5,9 +5,13 @@ namespace Src\Core;
 use Src\Core\DB;
 use Src\Core\Config;
 
-class Model
+abstract class Model
 {
     protected static string $table_name;
+
+    protected static array $default_values;
+
+    protected static array $not_to_update_fields;
 
     public static function selectPaginate(array $select = [], int $page = 1, string $order = '', int $per_page = 3): array
     {
@@ -53,40 +57,49 @@ class Model
 
     public static function save(array $fields, array $values, int $id = 0) : bool
     {
-        if ($id) {
-            $query = "SELECT `" . implode('`,`', $fields) ."` FROM `" . static::$table_name . "` WHERE id = $id";
-            $current = DB::getRow($query);
-            if (!$current) {
-                return true;
-            }
-
-            $update_ar = $values_ar = [];
-            $updated = false;
-            foreach ($fields as $field) {
-                if (isset($current[$field]) && $current[$field] != $values[':' . $field]) {
-                    if ($field != 'updated_by') {
-                        $updated = true;
-                    }
-                    $update_ar[] = "`$field` = :$field";
-                    $values_ar[":$field"] = $values[':' . $field];
-                }
-            }
-            $update_ar[] = '`updated_at` = NOW()';
-
-            if ($updated) {
-                $query = "UPDATE `" . static::$table_name . "` SET " . implode(', ', $update_ar) . " WHERE id = $id";
-                return DB::updateRow($query, $values_ar);
-            }
-
-            return true;
-        }
-
         $query = "INSERT INTO `" . static::$table_name . "` (`" . implode('`,`', $fields) ."`) VALUES (" . implode(",", array_keys($values)) . ")";
         return DB::insertRow($query, $values);
     }
 
-    public static function delete(array $ids) : bool
+    public static function update(int $id, array $fields, array $values) : bool
     {
+        $query = "SELECT `" . implode('`,`', $fields) ."` FROM `" . static::$table_name . "` WHERE id = $id";
+        $current = DB::getRow($query);
+        if (!$current) {
+            return false;
+        }
+
+        $update_ar = $values_ar = [];
+        $updated = false;
+        foreach ($fields as $field) {
+            if ($current[$field] != $values[':' . $field]) {
+                if (!$updated && !in_array($field, static::$not_to_update_fields)) {
+                    $updated = true;
+                }
+                if (!empty(static::$default_values[$field])) {
+                    $update_ar[] = "`$field` = " . static::$default_values[$field];
+                }
+                else {
+                    $update_ar[] = "`$field` = :$field";
+                    $values_ar[":$field"] = $values[':' . $field];
+                }
+            }
+        }
+
+        if ($updated) {
+            $query = "UPDATE `" . static::$table_name . "` SET " . implode(', ', $update_ar) . " WHERE id = $id";
+            return DB::updateRow($query, $values_ar);
+        }
+
+        return true;
+    }
+
+    public static function delete(array $ids = []) : bool
+    {
+        if (!count($ids)) {
+            return true;
+        }
+
         $query = "DELETE FROM `" . static::$table_name . "` WHERE id IN (" . implode(',', $ids) . ")";
         return DB::deleteRow($query);
     }
