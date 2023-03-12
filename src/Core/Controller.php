@@ -23,6 +23,14 @@ class Controller
         $this->view = new View();
     }
 
+    /**
+     * Prepearing post dato for saving in model
+     * @param array $fields - items that should be added and validated from $data array
+     * @param array $data - fields => values array
+     * @param ValidationInterface $validator - validation interface
+     * 
+     * @return array [$errors, $params]
+     */
     public function prepareSaveData(array $fields, array $data, ValidationInterface $validator): array
     {
         $errors = $params = [];
@@ -37,7 +45,15 @@ class Controller
         return [$errors, $params];
     }
 
-    public function render(string $template_name, $data = [], $layout = '')
+    /**
+     * Invoking render method from view
+     * @param string $template_name
+     * @param array $data
+     * @param string $layout
+     * 
+     * @return void
+     */
+    public function render(string $template_name, $data = [], $layout = '') : void
     {
         if (!$layout) {
             $layout = $this->layout;

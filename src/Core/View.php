@@ -4,9 +4,20 @@ namespace Src\Core;
 
 class View
 {
+    /**
+     * @var array variables from $_REQUEST arrays
+     */
     private array $request = [];
 
-    public function render(string $template_name, $data = [], string $layout = 'main')
+    /**
+     * Render template with layout
+     * @param string $template_name
+     * @param array $data
+     * @param string $layout
+     * 
+     * @return void
+     */
+    public function render(string $template_name, $data = [], string $layout = 'main') : void
     {
         if (!isset($data['title'])) {
             $data['title'] = Config::TITLE;
@@ -25,7 +36,14 @@ class View
         include_once __DIR__ . '/../Views/Layouts/' . $layout . '.php';
     }
 
-    public function renderPartial(string $template_name, $data = [])
+    /**
+     * Render only view without layout
+     * @param string $template_name
+     * @param array $data
+     * 
+     * @return void
+     */
+    public function renderPartial(string $template_name, $data = []) : void
     {
         foreach ($data as $key => $val) {
             $$key = $val;
@@ -34,6 +52,12 @@ class View
         include_once __DIR__ . '/../Views/' . $template_name . '.php';
     }
 
+    /**
+     * Check for undefined values in $_REQUEST array
+     * @param mixed $name
+     * 
+     * @return [type]
+     */
     public function __get($name)
     {
         if (isset($this->request[$name])) {

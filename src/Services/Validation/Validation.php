@@ -8,6 +8,10 @@ abstract class Validation implements ValidationInterface
 
     private static $instance;
 
+    /**
+     * Singleton object
+     * @return Validation
+     */
     public static function getInstance()
     {
         if (is_null(static::$instance)) {
@@ -17,29 +21,43 @@ abstract class Validation implements ValidationInterface
         return static::$instance;
     }
 
+    /**
+     * Main validation method
+     * @param string $field
+     * @param mixed $value
+     * 
+     * @return array [error => '', value = '']
+     */
     public function validate(string $field, $value): array
     {
         $result = [
             'error' => '',
             'value' => $value
         ];
-        //print_r($this->fields); die;
-        //echo $field . ' ' . $value . '<br>';
 
         if (!isset($this->fields[$field])) {
             return $result;
         }
 
-        $type = explode(':', $this->fields[$field]['type']);
-        $length = isset($type[1]) ? (int)$type[1] : 0;
-        $type = ucfirst($type[0]);
+        $type_ar = explode('|', $this->fields[$field]['type']);
+        $functions = ['text', 'email', 'checkbox'];
+        $min = $max = 0;
+        foreach ($type_ar as $type_item) {
+            if ($type_item == 'required') {
+                $min = 1;
+            }
+            elseif( preg_match("/max\:([0-9]+)/", $type_item, $matches)) {
+                $max = (int)$matches[1];
+            }
+            else {
+                $function = "validate{$type_item}";
+            }
+        }
+
         $name = $this->fields[$field]['name'];
 
-        $function = "validate$type";
-
-        //echo $function . ' ' . $value . '<br';
         try {
-            list($error, $value) = $this->$function($field, $value, $length);
+            list($error, $value) = $this->$function($field, $value, $min, $max);
             $result['error'] = str_replace('{field}', $name, $error);
             $result['value'] = $value;
         } catch (\Exception $e) {
@@ -48,26 +66,56 @@ abstract class Validation implements ValidationInterface
         return  $result;
     }
 
-    protected function validateText(string $field, $value, int $length): array
+    /**
+     * Text validation
+     * @param string $field
+     * @param mixed $value
+     * @param int $min
+     * @param int $max
+     * 
+     * @return array [error => '', value = '']
+     */
+    protected function validateText(string $field, $value, int $min, int $max): array
     {
         $error = '';
-        if ($length && strlen($value) > $length) {
-            $error = "Field '{field}' is too long, max: $length";
+        if ($min && strlen($value) < $min) {
+            $error = "Field '{field}' is " . ($min == 1 ? 'required.' : "too small, need $min characters.");
+        }
+        elseif ($max && strlen($value) > $max) {
+            $error = "Field '{field}' is too long, max: $max.";
         }
         return [$error, htmlentities($value)];
     }
 
-    protected function validateEmail(string $field, $value, int $length): array
+    /**
+     * Email validation
+     * @param string $field
+     * @param mixed $value
+     * @param int $min
+     * @param int $max
+     * 
+     * @return array [error => '', value = '']
+     */
+    protected function validateEmail(string $field, $value, int $min, int $max): array
     {
         $error = '';
         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             $error =  "'{field}' is invalid email address.";
             return [$error, htmlentities($value)];
         }
-        return $this->validateText($field, $value, $length);
+        return $this->validateText($field, $value, $min, $max);
     }
 
-    protected function validateCheckbox(string $field, $value, int $length = 0): array
+    /**
+     * Checkbox validation
+     * @param string $field
+     * @param mixed $value
+     * @param int $min
+     * @param int $max
+     * 
+     * @return array [error => '', value = '']
+     */
+    protected function validateCheckbox(string $field, $value, int $min = 0, int $max = 0): array
     {
         $value = !$value ? 0 : 1;
         return ['', $value];

@@ -2,22 +2,33 @@
 
 namespace Src\Core;
 
+/**
+* Trait that implements authentication methods
+ */
 trait Auth
 {
     protected $login_url = '/admin/index/login';
     protected $redirect_url = '/admin/index';
     protected $login_view = 'admin/login';
 
-    protected function checkAuthorize()
+    /**
+     * Check that user is authenticated, redirect if not
+     * @return void
+     */
+    protected function checkAuthentication() : void
     {
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (strpos($path, $this->login_url) === false && !$this->isAuthorized()) {
+        if (strpos($path, $this->login_url) === false && !$this->isAuthenticated()) {
             header("Location: {$this->login_url}");
             die;
         }
     }
 
-    protected function isAuthorized()
+    /**
+     * Start session and check if authenticated user is exist
+     * @return bool
+     */
+    protected function isAuthenticated() : bool
     {
         ini_set('session.use_only_cookies', 1);
         session_start([
@@ -31,7 +42,14 @@ trait Auth
         return false;
     }
 
-    protected function auth($user, $password)
+    /**
+     * Add authenticated user to session
+     * @param mixed $user
+     * @param mixed $password
+     * 
+     * @return bool
+     */
+    protected function auth($user, $password) : bool
     {
         if (isset(Config::USERS[$user]) && Config::USERS[$user] == $password) {
             $_SESSION['user'] = $user;
@@ -41,9 +59,12 @@ trait Auth
         return false;
     }
 
+    /**
+     * Main action for auth page
+     */
     public function login()
     {
-        if ($this->isAuthorized()) {
+        if ($this->isAuthenticated()) {
             header("Location: {$this->redirect_url}");
             die;
         }
@@ -63,6 +84,9 @@ trait Auth
         ]);
     }
 
+    /**
+     * Logout action
+     */
     public function logout()
     {
         unset($_SESSION['user']);

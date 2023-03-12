@@ -14,6 +14,6 @@ class AdminController extends Controller
 
         $this->per_page = 5;
 
-        $this->checkAuthorize();
+        $this->checkAuthentication();
     }
 }

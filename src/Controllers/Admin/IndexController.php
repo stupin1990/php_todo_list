@@ -58,6 +58,14 @@ class IndexController extends AdminController
         ]);
     }
 
+    /**
+     * Add or update one task
+     * @param mixed $fields
+     * @param mixed $data
+     * @param int $id
+     * 
+     * @return array
+     */
     public function handleTasks($fields, $data, $id = 0) : array
     {
         list($errors, $params) = $this->prepareSaveData($fields, $data, TaskValidation::getInstance());

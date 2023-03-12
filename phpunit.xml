@@ -1,0 +1,8 @@
+<phpunit>
+  <testsuites>
+    <testsuite name="controller">
+      <file>Src/Tests/ValidationTest.php</file>
+      <file>Src/Tests/ControllerTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>

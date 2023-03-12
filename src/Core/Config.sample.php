@@ -2,6 +2,9 @@
 
 namespace Src\Core;
 
+/**
+ * App configuration constants
+ */
 class Config
 {
     public const DB_HOST = 'localhost';

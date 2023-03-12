@@ -2,6 +2,9 @@
 
 namespace Src\Core;
 
+/**
+ * Main class for database operations
+ */
 final class DB
 {
     private \PDO $dbo;

@@ -4,22 +4,25 @@ namespace Src\Services\Validation;
 
 class TaskValidation extends Validation
 {
+    /**
+     * Field names and validation rules
+     */
     public array $fields = [
         'name' => [
             'name' => 'User name',
-            'type' => 'text:100'
+            'type' => 'required|text|max:100'
         ],
         'email' => [
             'name' => 'User email',
-            'type' => 'email:100'
+            'type' => 'required|email|max:100'
         ],
         'post' => [
             'name' => 'Post',
-            'type' => 'text'
+            'type' => 'required|text'
         ],
         'done' => [
             'name' => 'Done',
-            'type' => 'checkbox'
+            'type' => 'required|checkbox'
         ],
     ];
 }
