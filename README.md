@@ -14,5 +14,7 @@ Administrator page (login "admin", password "123"). The administrator has the ab
 ## Requirements
 
 PHP >= 8.0.13
+
 MYSQL >= 8.0.26
+
 Composer >= 2.3.7
